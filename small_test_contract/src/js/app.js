@@ -1,6 +1,6 @@
 function setString() {
   var someString = document.getElementById("someString").value.toString();
-  Web3.methods.setSomeString(someString).call();
+  web3.methods.setSomeString(someString).call();
 }
 
 function getString() {

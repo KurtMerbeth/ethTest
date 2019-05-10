@@ -1,0 +1,88 @@
+<html>
+<h1>Contract Test: getter and setter</h1>
+<main>
+  <form>
+    <label>setString:
+      <input id="someString" value="Kurt">
+    </label>
+    <br />
+
+    <button type="button" id="button_setString">set String</button>
+    <br />
+    <br />
+    <br />
+
+    <label>getString:
+      <br />
+
+      <output id="getString"></output>
+    </label>
+    <br />
+
+    <button type="button" id="button_getString">get String</button>
+  </form>
+</main>
+<!--
+<script src="js/web3.min.js"></script>
+<script src="js/con.js"></script>
+<script src="js/app.js"></script>
+-->
+
+<!-- ekelhaff -->
+<script src="src/js/web3.min.js"></script>
+    <script type="text/javascript">
+
+        var contractAddress = '0x2A074210B39d75Bd0d8e49bC393762b1aB687C4f';
+
+        var contractAbi;
+         readTextFile("build/contracts/small_Test_Contract.json", function(text){
+          contractAbi = JSON.parse(text);
+          //contractAbi = JSON.parse('[ { "constant": false, "inputs": [ { "name": "_someString", "type": "string" } ], "name": "setSomeString", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "someString", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" } ]');
+          console.log(contractAbi);
+});
+
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        }
+        else {
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+        }
+        console.log(contractAddress);
+        var con = web3.eth.contract(contractAbi).at(contractAddress);
+
+
+
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+            callback(rawFile.responseText);
+        }
+    }
+    rawFile.send(null);
+}
+
+
+        function setString() {
+          console.log("function setString()");
+          var someString = document.getElementById("someString").value.toString();
+          web3.setSomeString(someString).call();
+        }
+
+        function getString() {
+          console.log("function getString()");
+          document.getElementById("getString").value = con.someString().call();
+        }
+
+        window.onload = function () {
+        	document.getElementById("button_setString")
+        		.onclick = setString;
+          document.getElementById("button_getString")
+          	.onclick = getString;
+        }
+
+    </script>
+
+</html>
