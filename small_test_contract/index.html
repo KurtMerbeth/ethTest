@@ -33,28 +33,21 @@
     <script type="text/javascript">
 
         var contractAddress = '0x2A074210B39d75Bd0d8e49bC393762b1aB687C4f';
-
         var contractAbi;
+        var con;
          readTextFile("build/contracts/small_Test_Contract.json", function(text){
-         contractAbi = text;
+         contractAbi = JSON.parse(text).abi;
          console.log(contractAbi);
-        //  contractAbi = JSON.parse('[ { "constant": false, "inputs": [ { "name": "_someString", "type": "string" } ], "name": "setSomeString", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "someString", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" } ]');
-});
-        console.log(contractAbi);
-        console.log(JSON.stringify(contractAbi));
+         con = new web3.eth.contract(contractAbi, contractAddress);
+         console.log(con);
+
+        });
         if (typeof web3 !== 'undefined') {
             web3 = new Web3(web3.currentProvider);
         }
         else {
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
         }
-
-
-        const con = new web3.eth.contract(contractAbi, contractAddress);
-        con.address = contractAddress;
-        console.log(con.address);
-        con.jsonInterface = contractAbi;
-        console.log(con.jsonInterface);
 
 
 
