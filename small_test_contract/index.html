@@ -36,19 +36,25 @@
 
         var contractAbi;
          readTextFile("build/contracts/small_Test_Contract.json", function(text){
-          contractAbi = JSON.parse(text);
-          //contractAbi = JSON.parse('[ { "constant": false, "inputs": [ { "name": "_someString", "type": "string" } ], "name": "setSomeString", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "someString", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" } ]');
-          console.log(contractAbi);
+         contractAbi = text;
+         console.log(contractAbi);
+        //  contractAbi = JSON.parse('[ { "constant": false, "inputs": [ { "name": "_someString", "type": "string" } ], "name": "setSomeString", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "someString", "outputs": [ { "name": "", "type": "string" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" } ]');
 });
-
+        console.log(contractAbi);
+        console.log(JSON.stringify(contractAbi));
         if (typeof web3 !== 'undefined') {
             web3 = new Web3(web3.currentProvider);
         }
         else {
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
         }
-        console.log(contractAddress);
-        var con = web3.eth.contract(contractAbi).at(contractAddress);
+
+
+        const con = new web3.eth.contract(contractAbi, contractAddress);
+        con.address = contractAddress;
+        console.log(con.address);
+        con.jsonInterface = contractAbi;
+        console.log(con.jsonInterface);
 
 
 
@@ -68,12 +74,13 @@ function readTextFile(file, callback) {
         function setString() {
           console.log("function setString()");
           var someString = document.getElementById("someString").value.toString();
-          web3.setSomeString(someString).call();
+          con.methods.setSomeString(someString).call();
+
         }
 
         function getString() {
           console.log("function getString()");
-          document.getElementById("getString").value = con.someString().call();
+          document.getElementById("getString").value = con.methods.someString().call();
         }
 
         window.onload = function () {
